@@ -5,6 +5,8 @@
   "packageManager": "pnpm@10.0.0",
   "scripts": {
     "setup:local": "bash ./scripts/setup_local_env.sh",
+    "checklist:local": "bash ./scripts/run_local_deploy_checklist.sh",
+    "stop:local": "bash ./scripts/stop_local_deploy.sh",
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
     "typecheck": "turbo run typecheck",

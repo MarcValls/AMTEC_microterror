@@ -1,11 +1,12 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 
 from app.agent_catalog import AGENT_CATALOG, AGENT_INDEX
+from app.checklists import resolve_local_deploy_checklist
 from app.playbooks import LOCAL_DEPLOY_PLAYBOOK
 
 app = FastAPI(
     title="AMTEC microterror agent orchestrator",
-    version="0.2.0",
+    version="0.3.0",
     description="Servicio base para coordinar agentes de producto, runtime y despliegue local.",
 )
 
@@ -31,3 +32,8 @@ def get_agent(agent_id: str) -> dict:
 @app.get("/playbooks/local-deploy")
 def get_local_deploy_playbook() -> dict:
     return LOCAL_DEPLOY_PLAYBOOK
+
+
+@app.get("/checklists/local-deploy")
+def get_local_deploy_checklist(repo_dir: str | None = Query(default=None)) -> dict:
+    return resolve_local_deploy_checklist(repo_dir=repo_dir)

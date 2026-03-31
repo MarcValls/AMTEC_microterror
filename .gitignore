@@ -5,6 +5,7 @@ coverage/
 .venv/
 .venv-api/
 .venv-agent/
+.local-runtime/
 __pycache__/
 .pytest_cache/
 .mypy_cache/
