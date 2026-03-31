@@ -5,6 +5,7 @@ import { useHallwayRuntime } from './features/corridor/runtime/useHallwayRuntime
 
 export default function App() {
   const runtime = useHallwayRuntime();
+  const isRuntimeLocked = !runtime.isSessionStarted || Boolean(runtime.ending);
 
   return (
     <main className="app-shell">
@@ -23,6 +24,12 @@ export default function App() {
             <strong>{Math.round(runtime.pressure * 100)}%</strong>
           </article>
           <article className="stat-card">
+            <span>Progreso</span>
+            <strong>
+              {runtime.progress} / {runtime.corridorLength}
+            </strong>
+          </article>
+          <article className="stat-card">
             <span>Eventos vistos</span>
             <strong>{runtime.eventsSeen}</strong>
           </article>
@@ -34,33 +41,64 @@ export default function App() {
         </section>
 
         <section className="scene-panel">
-          <CorridorScene pressure={runtime.pressure} />
+          <CorridorScene
+            pressure={runtime.pressure}
+            progress={runtime.progress}
+            corridorLength={runtime.corridorLength}
+            eventId={runtime.activeEventId}
+            stage={runtime.stage}
+            currentEventLabel={runtime.currentEventLabel}
+            ending={runtime.ending}
+          />
         </section>
 
         <section className="controls-panel">
           <button onClick={runtime.startSession} disabled={runtime.isSessionStarted && !runtime.ending}>
             Iniciar sesión
           </button>
-          <button onClick={runtime.advance}>Avanzar</button>
-          <button onClick={runtime.lookBack}>Mirar atrás</button>
-          <button onClick={runtime.interact}>Interactuar</button>
-          <button onClick={runtime.holdPosition}>Detenerse</button>
+          <button onClick={runtime.advance} disabled={isRuntimeLocked}>
+            Avanzar
+          </button>
+          <button onClick={runtime.lookBack} disabled={isRuntimeLocked}>
+            Mirar atrás
+          </button>
+          <button onClick={runtime.interact} disabled={isRuntimeLocked}>
+            Interactuar
+          </button>
+          <button onClick={runtime.holdPosition} disabled={isRuntimeLocked}>
+            Detenerse
+          </button>
           <button onClick={runtime.restart}>Reiniciar</button>
         </section>
 
         <section className="notes-panel">
-          <p>
-            <strong>Tramo:</strong> {runtime.progress} / {runtime.corridorLength}
-          </p>
+          <div className="progress-block">
+            <div className="progress-copy">
+              <span>Avance hacia la puerta final</span>
+              <strong>{Math.round(runtime.progressRatio * 100)}%</strong>
+            </div>
+            <div className="progress-track" aria-hidden="true">
+              <div className="progress-fill" style={{ width: `${Math.round(runtime.progressRatio * 100)}%` }} />
+            </div>
+          </div>
+
           <p>
             <strong>Estado narrativo:</strong> {runtime.stage}
           </p>
           <p>
-            <strong>Evento actual:</strong> {runtime.currentEventLabel}
+            <strong>Evento activo:</strong> {runtime.currentEventLabel}
           </p>
           <p>
             <strong>Look backs:</strong> {runtime.lookBacks} · <strong>Interacciones:</strong> {runtime.interactions}
           </p>
+
+          {runtime.ending ? (
+            <div className={`ending-banner ending-banner--${runtime.ending}`}>
+              <strong>Final: {runtime.ending}</strong>
+              <span>{runtime.currentEventLabel}</span>
+            </div>
+          ) : null}
+
           <AudioDirector enabled={runtime.isSessionStarted} pressure={runtime.pressure} tension={runtime.tension} />
         </section>
       </section>

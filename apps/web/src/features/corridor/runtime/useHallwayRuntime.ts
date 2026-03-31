@@ -19,13 +19,16 @@ export function useHallwayRuntime() {
   const [interactions, setInteractions] = useState(0);
   const [seenEventIds, setSeenEventIds] = useState<string[]>([]);
   const [currentEventLabel, setCurrentEventLabel] = useState('Pulsa “Iniciar sesión” para entrar al pasillo.');
+  const [activeEventId, setActiveEventId] = useState<string | null>(null);
   const [ending, setEnding] = useState<HallwayEndingId | null>(null);
 
   const tension = useMemo(() => clamp(pressure * 0.82 + progress * 0.04, 0, 1), [pressure, progress]);
   const stage = useMemo(() => stageFromPressure(pressure), [pressure]);
+  const progressRatio = useMemo(() => clamp(progress / corridorRuntimeTemplate.corridorLength, 0, 1), [progress]);
 
   const startSession = () => {
     setIsSessionStarted(true);
+    setActiveEventId('session_started');
     setCurrentEventLabel('La luz del primer tramo vibra. El pasillo te acepta.');
   };
 
@@ -38,11 +41,13 @@ export function useHallwayRuntime() {
     });
 
     if (!event) {
+      setActiveEventId('ambient_shift');
       setCurrentEventLabel('No ocurre nada claro, y eso te inquieta más.');
       return;
     }
 
     setSeenEventIds((value) => [...value, event.eventId]);
+    setActiveEventId(event.eventId);
     setCurrentEventLabel(event.label);
   };
 
@@ -60,6 +65,7 @@ export function useHallwayRuntime() {
     }
 
     setEnding(nextEnding);
+    setActiveEventId(`ending_${nextEnding}`);
     setCurrentEventLabel(corridorRuntimeTemplate.endings[nextEnding]);
   };
 
@@ -109,6 +115,7 @@ export function useHallwayRuntime() {
 
     const nextPressure = clamp(pressure - 0.05, 0, 1);
     setPressure(nextPressure);
+    setActiveEventId('hold_position');
     setCurrentEventLabel('Te detienes. El zumbido no desaparece, pero respiras mejor.');
   };
 
@@ -120,6 +127,7 @@ export function useHallwayRuntime() {
     setInteractions(0);
     setSeenEventIds([]);
     setCurrentEventLabel('Pulsa “Iniciar sesión” para entrar al pasillo.');
+    setActiveEventId(null);
     setEnding(null);
   };
 
@@ -129,10 +137,12 @@ export function useHallwayRuntime() {
     pressure,
     tension,
     progress,
+    progressRatio,
     lookBacks,
     interactions,
     eventsSeen: seenEventIds.length,
     currentEventLabel,
+    activeEventId,
     ending,
     isSessionStarted,
     stage,
