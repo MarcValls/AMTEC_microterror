@@ -1,0 +1,121 @@
+{
+  "sceneId": "corredor_v1",
+  "templateType": "hallway",
+  "title": "Pasillo interminable",
+  "description": "Una experiencia breve de microterror centrada en un pasillo que se descompone perceptivamente.",
+  "durationTargetSeconds": 240,
+  "corridorLength": 7,
+  "threatType": "presencia_detras",
+  "threatPressureCurve": {
+    "base": 0.12,
+    "timeMultiplier": 0.018,
+    "movementMultiplier": 0.027,
+    "lookBackRiskMultiplier": 0.04,
+    "interactionRiskMultiplier": 0.03,
+    "maxPressure": 1
+  },
+  "lightPattern": {
+    "mode": "unstable_fluorescent",
+    "baseIntensity": 0.7,
+    "flickerProbability": 0.18,
+    "blackoutProbability": 0.04
+  },
+  "visualFilters": {
+    "grain": 0.22,
+    "vignette": 0.28,
+    "chromaticAberration": 0.08,
+    "distortion": 0.1,
+    "fog": 0.16
+  },
+  "audioPreset": {
+    "presetId": "corridor_v1",
+    "tensionBase": 0.25,
+    "droneLevel": 0.55,
+    "humLevel": 0.4,
+    "noiseLevel": 0.22,
+    "glitchProbability": 0.12,
+    "subPresence": 0.18,
+    "reverb": 0.31
+  },
+  "interactionModel": {
+    "canAdvance": true,
+    "canStop": true,
+    "canLookBack": true,
+    "canInteract": true
+  },
+  "eventPool": [
+    {
+      "eventId": "flicker_burst",
+      "label": "Parpadeo brusco",
+      "trigger": "segment_enter",
+      "minPressure": 0.1,
+      "maxPressure": 0.9,
+      "weight": 1
+    },
+    {
+      "eventId": "wall_knock",
+      "label": "Golpe tras la pared",
+      "trigger": "time_elapsed",
+      "minPressure": 0.2,
+      "maxPressure": 1,
+      "weight": 0.9
+    },
+    {
+      "eventId": "radio_interference",
+      "label": "Interferencia de radio",
+      "trigger": "interaction",
+      "minPressure": 0.25,
+      "maxPressure": 1,
+      "weight": 0.7
+    },
+    {
+      "eventId": "shadow_end",
+      "label": "Sombra al fondo",
+      "trigger": "look_back",
+      "minPressure": 0.35,
+      "maxPressure": 1,
+      "weight": 0.8
+    },
+    {
+      "eventId": "micro_blackout",
+      "label": "Apagón corto",
+      "trigger": "segment_enter",
+      "minPressure": 0.45,
+      "maxPressure": 1,
+      "weight": 0.75
+    },
+    {
+      "eventId": "breath_near",
+      "label": "Respiración cercana",
+      "trigger": "time_elapsed",
+      "minPressure": 0.55,
+      "maxPressure": 1,
+      "weight": 0.65
+    }
+  ],
+  "endingSet": [
+    {
+      "endingId": "escape",
+      "type": "good",
+      "label": "Escape"
+    },
+    {
+      "endingId": "loop",
+      "type": "ambiguous",
+      "label": "Bucle"
+    },
+    {
+      "endingId": "caught",
+      "type": "bad",
+      "label": "Alcanzado"
+    }
+  ],
+  "telemetry": {
+    "trackSessionStarted": true,
+    "trackLookBack": true,
+    "trackInteractions": true,
+    "trackEvents": true,
+    "trackEnding": true,
+    "trackShare": true
+  }
+}
