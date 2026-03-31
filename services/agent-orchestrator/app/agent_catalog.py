@@ -2,6 +2,36 @@ from __future__ import annotations
 
 AGENT_CATALOG = [
     {
+        "agentId": "tu_flipao_inicia_la_app",
+        "title": "Tu flipao inicia la app",
+        "role": "alias operativo de una sola llamada para levantar el entorno local completo y dejarlo verificable",
+        "scope": [
+            "encapsular el checklist local ejecutable",
+            "delegar el despliegue al coordinador principal",
+            "devolver el comando exacto de arranque",
+            "simplificar el inicio del runtime para jugar una partida",
+        ],
+        "inputs": [
+            "ruta absoluta del repositorio",
+            "scripts del flujo local",
+        ],
+        "outputs": [
+            "comando único de arranque",
+            "ruta de logs y reporte",
+            "estado de checklist local",
+        ],
+        "delegatesTo": ["local_deploy_manager"],
+        "invocationPhrases": [
+            "Tu flipao inicia la app",
+            "tu flipao inicia la app",
+        ],
+        "successCriteria": [
+            "API disponible en /health",
+            "web disponible en localhost:5173",
+            "reporte local generado",
+        ],
+    },
+    {
         "agentId": "local_deploy_manager",
         "title": "Local Deploy Manager",
         "role": "coordina el despliegue local completo del monorepo y decide el orden de ejecución",

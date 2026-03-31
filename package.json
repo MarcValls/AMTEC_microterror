@@ -7,6 +7,7 @@
     "setup:local": "bash ./scripts/setup_local_env.sh",
     "checklist:local": "bash ./scripts/run_local_deploy_checklist.sh",
     "stop:local": "bash ./scripts/stop_local_deploy.sh",
+    "tu:flipao:inicia:app": "bash ./scripts/tu_flipao_inicia_la_app.sh",
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
     "typecheck": "turbo run typecheck",
