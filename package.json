@@ -4,10 +4,13 @@
   "version": "0.1.0",
   "packageManager": "pnpm@10.0.0",
   "scripts": {
+    "setup:local": "bash ./scripts/setup_local_env.sh",
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
     "typecheck": "turbo run typecheck",
-    "dev:web": "pnpm --filter @amtec/web dev"
+    "dev:api": "bash ./scripts/start_api_local.sh",
+    "dev:web": "bash ./scripts/start_web_local.sh",
+    "dev:web:raw": "pnpm --filter @amtec/web dev"
   },
   "devDependencies": {
     "turbo": "^2.3.3"
