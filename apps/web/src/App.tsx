@@ -2,9 +2,11 @@ import { CorridorScene } from './features/corridor/CorridorScene';
 import { AudioDirector } from './features/corridor/runtime/AudioDirector';
 import { ThreatController } from './features/corridor/runtime/ThreatController';
 import { useHallwayRuntime } from './features/corridor/runtime/useHallwayRuntime';
+import { useHallwayTelemetry } from './features/corridor/runtime/useHallwayTelemetry';
 
 export default function App() {
   const runtime = useHallwayRuntime();
+  const telemetry = useHallwayTelemetry(runtime);
   const isRuntimeLocked = !runtime.isSessionStarted || Boolean(runtime.ending);
 
   return (
@@ -22,6 +24,10 @@ export default function App() {
           <article className="stat-card">
             <span>Presión</span>
             <strong>{Math.round(runtime.pressure * 100)}%</strong>
+          </article>
+          <article className="stat-card">
+            <span>Pico de presión</span>
+            <strong>{Math.round(runtime.pressurePeak * 100)}%</strong>
           </article>
           <article className="stat-card">
             <span>Progreso</span>
@@ -53,22 +59,22 @@ export default function App() {
         </section>
 
         <section className="controls-panel">
-          <button onClick={runtime.startSession} disabled={runtime.isSessionStarted && !runtime.ending}>
+          <button onClick={() => void telemetry.beginSession()} disabled={runtime.isSessionStarted}>
             Iniciar sesión
           </button>
-          <button onClick={runtime.advance} disabled={isRuntimeLocked}>
+          <button onClick={telemetry.advance} disabled={isRuntimeLocked}>
             Avanzar
           </button>
-          <button onClick={runtime.lookBack} disabled={isRuntimeLocked}>
+          <button onClick={telemetry.lookBack} disabled={isRuntimeLocked}>
             Mirar atrás
           </button>
-          <button onClick={runtime.interact} disabled={isRuntimeLocked}>
+          <button onClick={telemetry.interact} disabled={isRuntimeLocked}>
             Interactuar
           </button>
-          <button onClick={runtime.holdPosition} disabled={isRuntimeLocked}>
+          <button onClick={telemetry.holdPosition} disabled={isRuntimeLocked}>
             Detenerse
           </button>
-          <button onClick={runtime.restart}>Reiniciar</button>
+          <button onClick={telemetry.restart}>Reiniciar</button>
         </section>
 
         <section className="notes-panel">
@@ -81,6 +87,15 @@ export default function App() {
               <div className="progress-fill" style={{ width: `${Math.round(runtime.progressRatio * 100)}%` }} />
             </div>
           </div>
+
+          <div className="telemetry-row">
+            <span className={`telemetry-pill telemetry-pill--${telemetry.syncState}`}>{telemetry.syncLabel}</span>
+            <span className="telemetry-pill">
+              {telemetry.sessionId ? `Sesión ${telemetry.sessionId.slice(0, 8)}` : 'Sin sesión persistida'}
+            </span>
+          </div>
+
+          {telemetry.lastError ? <p className="telemetry-error">{telemetry.lastError}</p> : null}
 
           <p>
             <strong>Estado narrativo:</strong> {runtime.stage}

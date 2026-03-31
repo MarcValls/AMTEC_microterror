@@ -14,6 +14,7 @@ function stageFromPressure(pressure: number): string {
 export function useHallwayRuntime() {
   const [isSessionStarted, setIsSessionStarted] = useState(false);
   const [pressure, setPressure] = useState(0.12);
+  const [pressurePeak, setPressurePeak] = useState(0.12);
   const [progress, setProgress] = useState(0);
   const [lookBacks, setLookBacks] = useState(0);
   const [interactions, setInteractions] = useState(0);
@@ -25,6 +26,11 @@ export function useHallwayRuntime() {
   const tension = useMemo(() => clamp(pressure * 0.82 + progress * 0.04, 0, 1), [pressure, progress]);
   const stage = useMemo(() => stageFromPressure(pressure), [pressure]);
   const progressRatio = useMemo(() => clamp(progress / corridorRuntimeTemplate.corridorLength, 0, 1), [progress]);
+
+  const applyPressure = (nextPressure: number) => {
+    setPressure(nextPressure);
+    setPressurePeak((value) => Math.max(value, nextPressure));
+  };
 
   const startSession = () => {
     setIsSessionStarted(true);
@@ -77,7 +83,7 @@ export function useHallwayRuntime() {
     const nextProgress = Math.min(progress + 1, corridorRuntimeTemplate.corridorLength);
     const nextPressure = clamp(pressure + 0.1, 0, 1);
     setProgress(nextProgress);
-    setPressure(nextPressure);
+    applyPressure(nextPressure);
     triggerEvent('segment_enter');
     settleEnding(nextPressure, nextProgress, lookBacks, interactions);
   };
@@ -90,7 +96,7 @@ export function useHallwayRuntime() {
     const nextLookBacks = lookBacks + 1;
     const nextPressure = clamp(pressure + 0.07, 0, 1);
     setLookBacks(nextLookBacks);
-    setPressure(nextPressure);
+    applyPressure(nextPressure);
     triggerEvent('look_back');
     settleEnding(nextPressure, progress, nextLookBacks, interactions);
   };
@@ -103,7 +109,7 @@ export function useHallwayRuntime() {
     const nextInteractions = interactions + 1;
     const nextPressure = clamp(pressure + 0.09, 0, 1);
     setInteractions(nextInteractions);
-    setPressure(nextPressure);
+    applyPressure(nextPressure);
     triggerEvent('interaction');
     settleEnding(nextPressure, progress, lookBacks, nextInteractions);
   };
@@ -114,7 +120,7 @@ export function useHallwayRuntime() {
     }
 
     const nextPressure = clamp(pressure - 0.05, 0, 1);
-    setPressure(nextPressure);
+    applyPressure(nextPressure);
     setActiveEventId('hold_position');
     setCurrentEventLabel('Te detienes. El zumbido no desaparece, pero respiras mejor.');
   };
@@ -122,6 +128,7 @@ export function useHallwayRuntime() {
   const restart = () => {
     setIsSessionStarted(false);
     setPressure(0.12);
+    setPressurePeak(0.12);
     setProgress(0);
     setLookBacks(0);
     setInteractions(0);
@@ -135,6 +142,7 @@ export function useHallwayRuntime() {
     title: corridorRuntimeTemplate.title,
     corridorLength: corridorRuntimeTemplate.corridorLength,
     pressure,
+    pressurePeak,
     tension,
     progress,
     progressRatio,

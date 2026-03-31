@@ -90,7 +90,7 @@ button:disabled {
 .stats-grid {
   display: grid;
   gap: 14px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .stat-card {
@@ -203,6 +203,42 @@ button:disabled {
   background: linear-gradient(90deg, rgba(152, 180, 255, 0.78) 0%, rgba(244, 98, 98, 0.88) 100%);
 }
 
+.telemetry-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.telemetry-pill {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(243, 246, 251, 0.86);
+  font-size: 0.9rem;
+  padding: 0.45rem 0.8rem;
+}
+
+.telemetry-pill--idle {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.telemetry-pill--syncing {
+  border-color: rgba(130, 150, 255, 0.48);
+}
+
+.telemetry-pill--online {
+  border-color: rgba(118, 197, 160, 0.48);
+}
+
+.telemetry-pill--degraded {
+  border-color: rgba(255, 96, 96, 0.48);
+}
+
+.telemetry-error {
+  color: rgba(255, 140, 140, 0.92);
+}
+
 .ending-banner {
   display: grid;
   gap: 6px;
@@ -225,6 +261,12 @@ button:disabled {
 .ending-banner--caught {
   background: rgba(160, 69, 69, 0.16);
   border-color: rgba(255, 96, 96, 0.45);
+}
+
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 900px) {
