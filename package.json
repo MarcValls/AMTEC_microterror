@@ -1,0 +1,15 @@
+{
+  "name": "amtec_microterror",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.0.0",
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "dev:web": "pnpm --filter @amtec/web dev"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3"
+  }
+}
