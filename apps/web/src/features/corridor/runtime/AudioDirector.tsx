@@ -130,5 +130,9 @@ export function AudioDirector(props: AudioDirectorProps) {
     nodes.humOscillator.frequency.linearRampToValueAtTime(93 + tension * 18, now + 0.12);
   }, [props.pressure, props.tension]);
 
-  return <p>{label}</p>;
+  return (
+    <p className="sr-only" aria-live="polite">
+      {label}
+    </p>
+  );
 }

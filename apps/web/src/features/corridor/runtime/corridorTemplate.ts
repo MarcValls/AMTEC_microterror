@@ -16,7 +16,7 @@ export const corridorRuntimeTemplate = {
   eventPool: [
     {
       eventId: 'flicker_burst',
-      label: 'Parpadeo brusco en la luz del techo',
+      label: 'La luz del techo tiembla como si algo acabara de cruzarla',
       trigger: 'segment_enter',
       minPressure: 0.1,
       maxPressure: 0.9,
@@ -24,7 +24,7 @@ export const corridorRuntimeTemplate = {
     },
     {
       eventId: 'wall_knock',
-      label: 'Golpe seco detrás de la pared izquierda',
+      label: 'Un golpe seco vibra al otro lado de la pared izquierda',
       trigger: 'segment_enter',
       minPressure: 0.2,
       maxPressure: 1,
@@ -32,7 +32,7 @@ export const corridorRuntimeTemplate = {
     },
     {
       eventId: 'radio_interference',
-      label: 'La radio escupe una interferencia imposible',
+      label: 'La radio escupe una interferencia que no deberia existir',
       trigger: 'interaction',
       minPressure: 0.25,
       maxPressure: 1,
@@ -40,7 +40,7 @@ export const corridorRuntimeTemplate = {
     },
     {
       eventId: 'shadow_end',
-      label: 'Algo se recorta al fondo y desaparece al mirar',
+      label: 'Algo se recorta al fondo y desaparece justo cuando enfocas la vista',
       trigger: 'look_back',
       minPressure: 0.35,
       maxPressure: 1,
@@ -48,7 +48,7 @@ export const corridorRuntimeTemplate = {
     },
     {
       eventId: 'micro_blackout',
-      label: 'Apagón breve. El pasillo vuelve distinto.',
+      label: 'Un apagon breve lo cambia todo. El pasillo vuelve distinto.',
       trigger: 'segment_enter',
       minPressure: 0.45,
       maxPressure: 1,
@@ -56,7 +56,7 @@ export const corridorRuntimeTemplate = {
     },
     {
       eventId: 'breath_near',
-      label: 'Escuchas una respiración demasiado cerca.',
+      label: 'Escuchas una respiracion demasiado cerca de tu hombro.',
       trigger: 'interaction',
       minPressure: 0.55,
       maxPressure: 1,
@@ -64,8 +64,8 @@ export const corridorRuntimeTemplate = {
     },
   ] satisfies HallwayRuntimeEvent[],
   endings: {
-    escape: 'Llegas a la puerta, gira el pomo y el aire cambia. Sales, pero no sabes qué te seguía.',
-    loop: 'Cruzas el umbral y vuelves al inicio del mismo pasillo. Nada ha terminado.',
-    caught: 'La presencia te alcanza antes de abrir la puerta. El sonido se corta de golpe.',
+    escape: 'La puerta cede, entra aire limpio y el zumbido queda atras. Sales, pero no te atreves a mirar quien no ha cruzado contigo.',
+    loop: 'Cruzas el umbral y el mismo pasillo vuelve a desplegarse ante ti. Has llegado a algun sitio, pero no era la salida.',
+    caught: 'Algo te alcanza antes del pomo. El sonido se corta de golpe y el pasillo termina donde tu tambien.',
   },
 } as const;

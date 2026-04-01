@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AMTEC · Panel de Scripts</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0a0b0e;
+        --panel: rgba(17, 20, 28, 0.92);
+        --panel-strong: rgba(23, 28, 38, 0.96);
+        --border: rgba(255, 255, 255, 0.1);
+        --text: #f7f4ef;
+        --muted: rgba(247, 244, 239, 0.7);
+        --accent: #f0b56f;
+        --accent-soft: rgba(240, 181, 111, 0.14);
+        --danger: #ff8578;
+        --success: #8fcfa7;
+        font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at top, rgba(240, 181, 111, 0.12), transparent 24%),
+          radial-gradient(circle at 80% 10%, rgba(255, 133, 120, 0.1), transparent 20%),
+          linear-gradient(180deg, #100f12 0%, #07080b 100%);
+        color: var(--text);
+      }
+
+      .shell {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0 48px;
+      }
+
+      .hero {
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        padding: 28px;
+        background:
+          linear-gradient(135deg, rgba(240, 181, 111, 0.08), transparent 34%),
+          linear-gradient(180deg, rgba(25, 28, 35, 0.98) 0%, rgba(13, 16, 22, 0.94) 100%);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2.2rem, 5vw, 4.6rem);
+        line-height: 0.95;
+      }
+
+      .hero p {
+        max-width: 68ch;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--text);
+        padding: 0.55rem 0.9rem;
+        font-size: 0.92rem;
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+        margin-top: 22px;
+        grid-template-columns: 1.2fr 1fr;
+      }
+
+      .panel {
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: var(--panel);
+        padding: 22px;
+        box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
+      }
+
+      .panel h2 {
+        margin: 0 0 8px;
+        font-size: 1.5rem;
+      }
+
+      .panel-copy {
+        margin: 0 0 18px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .script-list {
+        display: grid;
+        gap: 14px;
+      }
+
+      .script-card {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 16px;
+      }
+
+      .script-card--featured {
+        border-color: rgba(240, 181, 111, 0.32);
+        background:
+          linear-gradient(135deg, rgba(240, 181, 111, 0.12), transparent 48%),
+          rgba(255, 255, 255, 0.04);
+      }
+
+      .script-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        align-items: flex-start;
+      }
+
+      .script-name {
+        margin: 0;
+        font-size: 1.05rem;
+      }
+
+      .script-note {
+        margin: 8px 0 0;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 0.35rem 0.7rem;
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+
+      .tag--run {
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      .tag--safe {
+        background: rgba(143, 207, 167, 0.12);
+        color: var(--success);
+      }
+
+      .tag--warn {
+        background: rgba(255, 133, 120, 0.12);
+        color: var(--danger);
+      }
+
+      .codebar {
+        display: flex;
+        gap: 10px;
+        align-items: stretch;
+        margin-top: 14px;
+      }
+
+      code {
+        flex: 1;
+        display: block;
+        overflow-x: auto;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.28);
+        color: #fff0d8;
+        padding: 0.95rem 1rem;
+        font-family: "JetBrains Mono", "Cascadia Code", monospace;
+        font-size: 0.92rem;
+      }
+
+      button {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+        cursor: pointer;
+        font: inherit;
+        min-width: 118px;
+        padding: 0.9rem 1rem;
+        transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.11);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+
+      button:focus-visible {
+        outline: 3px solid rgba(240, 181, 111, 0.8);
+        outline-offset: 2px;
+      }
+
+      .mini-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .mini-card {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 16px;
+      }
+
+      .mini-card h3 {
+        margin: 0 0 8px;
+        font-size: 1rem;
+      }
+
+      .mini-card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .footer-note {
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .codebar {
+          flex-direction: column;
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">AMTEC microterror · panel de scripts</p>
+        <h1>Arranque rapido del repo</h1>
+        <p>
+          Este panel resume los comandos principales del monorepo. El foco esta puesto en desarrollo local, sobre todo en levantar todo con un solo comando y en separar web y API cuando haga falta.
+        </p>
+        <div class="hero-actions">
+          <span class="pill">Monorepo con pnpm + turbo</span>
+          <span class="pill">Script principal: pnpm dev</span>
+          <span class="pill">Web directa en puerto 5173</span>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="panel">
+          <h2>Scripts principales</h2>
+          <p class="panel-copy">Usa estos comandos como punto de entrada. El primero es el que deberias disparar casi siempre para run dev.</p>
+
+          <div class="script-list">
+            <section class="script-card script-card--featured">
+              <div class="script-top">
+                <div>
+                  <h3 class="script-name">Desarrollo completo</h3>
+                  <p class="script-note">Levanta los paquetes con Turbo en paralelo. Es la opcion base para arrancar el entorno de desarrollo.</p>
+                </div>
+                <span class="tag tag--run">run dev</span>
+              </div>
+              <div class="codebar">
+                <code id="cmd-dev">pnpm dev</code>
+                <button data-copy-target="cmd-dev">Copiar</button>
+              </div>
+            </section>
+
+            <section class="script-card">
+              <div class="script-top">
+                <div>
+                  <h3 class="script-name">Solo web</h3>
+                  <p class="script-note">Arranca el frontend con el script local preparado para Vite.</p>
+                </div>
+                <span class="tag tag--safe">frontend</span>
+              </div>
+              <div class="codebar">
+                <code id="cmd-web">pnpm dev:web</code>
+                <button data-copy-target="cmd-web">Copiar</button>
+              </div>
+            </section>
+
+            <section class="script-card">
+              <div class="script-top">
+                <div>
+                  <h3 class="script-name">Solo API</h3>
+                  <p class="script-note">Levanta la API local mediante el script bash del repo.</p>
+                </div>
+                <span class="tag tag--safe">backend</span>
+              </div>
+              <div class="codebar">
+                <code id="cmd-api">pnpm dev:api</code>
+                <button data-copy-target="cmd-api">Copiar</button>
+              </div>
+            </section>
+
+            <section class="script-card">
+              <div class="script-top">
+                <div>
+                  <h3 class="script-name">Web raw</h3>
+                  <p class="script-note">Lanza directamente el paquete web con el filtro de pnpm, sin pasar por el script bash.</p>
+                </div>
+                <span class="tag tag--safe">vite</span>
+              </div>
+              <div class="codebar">
+                <code id="cmd-web-raw">pnpm dev:web:raw</code>
+                <button data-copy-target="cmd-web-raw">Copiar</button>
+              </div>
+            </section>
+
+            <section class="script-card">
+              <div class="script-top">
+                <div>
+                  <h3 class="script-name">Setup local</h3>
+                  <p class="script-note">Prepara el entorno local antes de arrancar servicios por primera vez.</p>
+                </div>
+                <span class="tag tag--warn">setup</span>
+              </div>
+              <div class="codebar">
+                <code id="cmd-setup">pnpm setup:local</code>
+                <button data-copy-target="cmd-setup">Copiar</button>
+              </div>
+            </section>
+          </div>
+        </article>
+
+        <aside class="panel">
+          <h2>Utilidades</h2>
+          <p class="panel-copy">Scripts secundarios para validar, compilar o apagar lo que has levantado.</p>
+
+          <div class="mini-grid">
+            <section class="mini-card">
+              <h3>Build completa</h3>
+              <div class="codebar">
+                <code id="cmd-build">pnpm build</code>
+                <button data-copy-target="cmd-build">Copiar</button>
+              </div>
+            </section>
+
+            <section class="mini-card">
+              <h3>Typecheck</h3>
+              <div class="codebar">
+                <code id="cmd-typecheck">pnpm typecheck</code>
+                <button data-copy-target="cmd-typecheck">Copiar</button>
+              </div>
+            </section>
+
+            <section class="mini-card">
+              <h3>Checklist local</h3>
+              <div class="codebar">
+                <code id="cmd-checklist">pnpm checklist:local</code>
+                <button data-copy-target="cmd-checklist">Copiar</button>
+              </div>
+            </section>
+
+            <section class="mini-card">
+              <h3>Parar entorno local</h3>
+              <div class="codebar">
+                <code id="cmd-stop">pnpm stop:local</code>
+                <button data-copy-target="cmd-stop">Copiar</button>
+              </div>
+            </section>
+
+            <section class="mini-card">
+              <h3>Script auxiliar</h3>
+              <p>Existe tambien un disparador extra del repo:</p>
+              <div class="codebar">
+                <code id="cmd-flipao">pnpm tu:flipao:inicia:app</code>
+                <button data-copy-target="cmd-flipao">Copiar</button>
+              </div>
+            </section>
+          </div>
+
+          <p class="footer-note">Consejo practico: para trabajar normal, empieza por pnpm dev. Si estas tocando solo interfaz, usa pnpm dev:web.</p>
+        </aside>
+      </section>
+    </main>
+
+    <script>
+      const buttons = document.querySelectorAll('[data-copy-target]');
+
+      for (const button of buttons) {
+        button.addEventListener('click', async () => {
+          const targetId = button.getAttribute('data-copy-target');
+          const code = document.getElementById(targetId);
+
+          if (!code) return;
+
+          try {
+            await navigator.clipboard.writeText(code.textContent.trim());
+            const previous = button.textContent;
+            button.textContent = 'Copiado';
+            setTimeout(() => {
+              button.textContent = previous;
+            }, 1200);
+          } catch {
+            button.textContent = 'Error';
+            setTimeout(() => {
+              button.textContent = 'Copiar';
+            }, 1200);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
